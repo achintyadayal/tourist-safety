@@ -21,8 +21,12 @@ function Header() {
             <Shield className="size-5" />
           </div>
           <div className="leading-tight">
-            <div className="font-extrabold tracking-tight">Smart Tourist Safety</div>
-            <div className="text-xs text-muted-foreground">AI • Blockchain • Geo‑fencing</div>
+            <div className="font-extrabold tracking-tight">
+              Smart Tourist Safety
+            </div>
+            <div className="text-xs text-muted-foreground">
+              AI • Blockchain • Geo‑fencing
+            </div>
           </div>
         </Link>
         <nav className="hidden md:flex items-center gap-1">
@@ -64,7 +68,8 @@ function Header() {
               to={item.to}
               className={cn(
                 "shrink-0 px-3 py-1.5 rounded-full text-sm border",
-                location.pathname === item.to && "bg-accent text-accent-foreground",
+                location.pathname === item.to &&
+                  "bg-accent text-accent-foreground",
               )}
             >
               {item.label}
@@ -83,22 +88,31 @@ function Footer() {
         <div className="space-y-3">
           <div className="font-semibold">About</div>
           <p className="text-sm text-muted-foreground">
-            A secure, multilingual safety platform for tourists and authorities with real‑time monitoring, rapid response and tamper‑proof records.
+            A secure, multilingual safety platform for tourists and authorities
+            with real‑time monitoring, rapid response and tamper‑proof records.
           </p>
         </div>
         <div className="space-y-3">
           <div className="font-semibold">Capabilities</div>
           <ul className="text-sm text-muted-foreground space-y-2">
-            <li className="flex items-center gap-2"><IdCard className="size-4"/> Digital ID on blockchain</li>
-            <li className="flex items-center gap-2"><Map className="size-4"/> Geo‑fencing & heat maps</li>
-            <li className="flex items-center gap-2"><Radar className="size-4"/> AI anomaly detection</li>
-            <li className="flex items-center gap-2"><Siren className="size-4"/> Panic & automated alerts</li>
+            <li className="flex items-center gap-2">
+              <IdCard className="size-4" /> Digital ID on blockchain
+            </li>
+            <li className="flex items-center gap-2">
+              <Map className="size-4" /> Geo‑fencing & heat maps
+            </li>
+            <li className="flex items-center gap-2">
+              <Radar className="size-4" /> AI anomaly detection
+            </li>
+            <li className="flex items-center gap-2">
+              <Siren className="size-4" /> Panic & automated alerts
+            </li>
           </ul>
         </div>
         <div className="space-y-3">
           <div className="font-semibold">Preferences</div>
           <div className="flex items-center gap-2">
-            <Languages className="size-4"/>
+            <Languages className="size-4" />
             <select className="h-9 rounded-md border bg-background px-3 text-sm">
               <option>English</option>
               <option>हिन्दी</option>
@@ -113,16 +127,27 @@ function Footer() {
               <option>ਪੰਜਾਬੀ</option>
             </select>
           </div>
-          <p className="text-xs text-muted-foreground">End‑to‑end encryption • Privacy‑first • Compliance ready</p>
+          <p className="text-xs text-muted-foreground">
+            End‑to‑end encryption • Privacy‑first • Compliance ready
+          </p>
         </div>
       </div>
       <div className="border-t">
         <div className="container flex flex-col md:flex-row items-center justify-between py-6 gap-3 text-xs text-muted-foreground">
-          <div>© {new Date().getFullYear()} Smart Tourist Safety. All rights reserved.</div>
+          <div>
+            © {new Date().getFullYear()} Smart Tourist Safety. All rights
+            reserved.
+          </div>
           <div className="flex gap-4">
-            <Link to="/privacy" className="hover:text-foreground">Privacy</Link>
-            <Link to="/terms" className="hover:text-foreground">Terms</Link>
-            <Link to="/security" className="hover:text-foreground">Security</Link>
+            <Link to="/privacy" className="hover:text-foreground">
+              Privacy
+            </Link>
+            <Link to="/terms" className="hover:text-foreground">
+              Terms
+            </Link>
+            <Link to="/security" className="hover:text-foreground">
+              Security
+            </Link>
           </div>
         </div>
       </div>
