@@ -10,6 +10,10 @@ import AppLayout from "@/components/layout/AppLayout";
 import Index from "./pages/Index";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
+import DigitalIdPage from "./pages/DigitalIdPage";
+import TouristAppPage from "./pages/TouristAppPage";
+import Authorities from "./pages/Authorities";
+import Alerts from "./pages/Alerts";
 
 const queryClient = new QueryClient();
 
@@ -22,10 +26,10 @@ const App = () => (
         <Routes>
           <Route element={<AppLayout />}>
             <Route index element={<Index />} />
-            <Route path="digital-id" element={<Placeholder />} />
-            <Route path="tourist-app" element={<Placeholder />} />
-            <Route path="dashboard" element={<Placeholder />} />
-            <Route path="alerts" element={<Placeholder />} />
+            <Route path="digital-id" element={<DigitalIdPage />} />
+            <Route path="tourist-app" element={<TouristAppPage />} />
+            <Route path="dashboard" element={<Authorities />} />
+            <Route path="alerts" element={<Alerts />} />
             <Route path="privacy" element={<Placeholder />} />
             <Route path="terms" element={<Placeholder />} />
             <Route path="security" element={<Placeholder />} />
