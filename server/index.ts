@@ -107,11 +107,15 @@ export function createServer() {
   });
 
   // 404 handler for API routes
-  app.use("/api*", (req, res) => {
-    res.status(404).json({
-      success: false,
-      error: `API endpoint not found: ${req.method} ${req.path}`
-    });
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api/')) {
+      res.status(404).json({
+        success: false,
+        error: `API endpoint not found: ${req.method} ${req.path}`
+      });
+    } else {
+      next();
+    }
   });
 
   return app;
