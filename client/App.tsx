@@ -38,4 +38,13 @@ const App = () => (
   </QueryClientProvider>
 );
 
-createRoot(document.getElementById("root")!).render(<App />);
+import type { Root } from "react-dom/client";
+
+const container = document.getElementById("root")!;
+// Reuse a single root across HMR to avoid double createRoot warnings
+const globalAny = globalThis as unknown as { __app_root?: Root };
+if (!globalAny.__app_root) {
+  globalAny.__app_root = createRoot(container);
+}
+
+globalAny.__app_root.render(<App />);
