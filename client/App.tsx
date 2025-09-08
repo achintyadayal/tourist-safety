@@ -6,7 +6,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AppLayout from "@/components/layout/AppLayout";
 import Index from "./pages/Index";
+import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,8 +20,17 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route element={<AppLayout />}>
+            <Route index element={<Index />} />
+            <Route path="digital-id" element={<Placeholder />} />
+            <Route path="tourist-app" element={<Placeholder />} />
+            <Route path="dashboard" element={<Placeholder />} />
+            <Route path="alerts" element={<Placeholder />} />
+            <Route path="privacy" element={<Placeholder />} />
+            <Route path="terms" element={<Placeholder />} />
+            <Route path="security" element={<Placeholder />} />
+          </Route>
+          {/* Catch-all must remain last */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
