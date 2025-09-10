@@ -8,7 +8,6 @@ const navItems = [
   { to: "/digital-id", label: "Digital ID" },
   { to: "/tourist-app", label: "Tourist App" },
   { to: "/dashboard", label: "Authorities" },
-  { to: "/alerts", label: "Alerts" },
 ];
 
 function Header() {

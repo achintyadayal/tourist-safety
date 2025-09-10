@@ -10,10 +10,9 @@ import AppLayout from "@/components/layout/AppLayout";
 import Index from "./pages/Index";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
-import DigitalIdPage from "./pages/DigitalIdPage";
-import TouristAppPage from "./pages/TouristAppPage";
-import Authorities from "./pages/Authorities";
-import Alerts from "./pages/Alerts";
+import DigitalIdLanding from "./pages/DigitalIdLanding";
+import AppFeaturesPage from "./pages/AppFeaturesPage";
+import AuthoritiesLandingPage from "./pages/AuthoritiesLandingPage";
 
 const queryClient = new QueryClient();
 
@@ -26,10 +25,9 @@ const App = () => (
         <Routes>
           <Route element={<AppLayout />}>
             <Route index element={<Index />} />
-            <Route path="digital-id" element={<DigitalIdPage />} />
-            <Route path="tourist-app" element={<TouristAppPage />} />
-            <Route path="dashboard" element={<Authorities />} />
-            <Route path="alerts" element={<Alerts />} />
+            <Route path="digital-id" element={<DigitalIdLanding />} />
+            <Route path="tourist-app" element={<AppFeaturesPage />} />
+            <Route path="dashboard" element={<AuthoritiesLandingPage />} />
             <Route path="privacy" element={<Placeholder />} />
             <Route path="terms" element={<Placeholder />} />
             <Route path="security" element={<Placeholder />} />

@@ -1,10 +1,10 @@
 import { RequestHandler } from "express";
-import { 
-  TouristId, 
-  CreateTouristIdRequest, 
-  ApiResponse, 
+import {
+  TouristId,
+  CreateTouristIdRequest,
+  ApiResponse,
   PaginatedResponse,
-  KYCData 
+  KYCData
 } from "@shared/api";
 import { generateId, calculateSafetyScore, generateBlockchainHash } from "../utils/helpers";
 import { touristIdStore } from "../data/store";
@@ -13,7 +13,7 @@ import { touristIdStore } from "../data/store";
 export const createTouristId: RequestHandler = async (req, res) => {
   try {
     const request: CreateTouristIdRequest = req.body;
-    
+
     // Validate required fields
     if (!request.kycData || !request.itinerary || !request.emergencyContacts) {
       return res.status(400).json({
@@ -187,7 +187,7 @@ export const getAllTouristIds: RequestHandler = (req, res) => {
 export const searchTouristIds: RequestHandler = (req, res) => {
   try {
     const { query } = req.query as { query: string };
-    
+
     if (!query) {
       return res.status(400).json({
         success: false,
@@ -195,7 +195,7 @@ export const searchTouristIds: RequestHandler = (req, res) => {
       } as ApiResponse);
     }
 
-    const searchResults = Array.from(touristIdStore.values()).filter(tourist => 
+    const searchResults = Array.from(touristIdStore.values()).filter(tourist =>
       tourist.kycData.name.toLowerCase().includes(query.toLowerCase()) ||
       tourist.kycData.documentNumber.includes(query) ||
       tourist.kycData.phoneNumber.includes(query) ||
