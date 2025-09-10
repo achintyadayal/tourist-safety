@@ -13,6 +13,8 @@ import NotFound from "./pages/NotFound";
 import DigitalIdLanding from "./pages/DigitalIdLanding";
 import AppFeaturesPage from "./pages/AppFeaturesPage";
 import AuthoritiesLandingPage from "./pages/AuthoritiesLandingPage";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,8 @@ const App = () => (
             <Route path="privacy" element={<Placeholder />} />
             <Route path="terms" element={<Placeholder />} />
             <Route path="security" element={<Placeholder />} />
+            <Route path="login" element={<Login />}/>
+            <Route path="signup" element={<Signup />}/>
           </Route>
           {/* Catch-all must remain last */}
           <Route path="*" element={<NotFound />} />

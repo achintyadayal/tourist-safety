@@ -47,8 +47,8 @@ function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <Button asChild variant="outline" className="gap-2">
-            <Link to="/digital-id">
-              <IdCard className="size-4" /> Generate ID
+            <Link to="/login">
+              <IdCard className="size-4" /> Login/Signup
             </Link>
           </Button>
           <Button asChild className="gap-2">
