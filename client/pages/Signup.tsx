@@ -1,21 +1,37 @@
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Shield } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<'tourist' | 'authority'>('tourist');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const { signup } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    if (!name || !email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
     setIsLoading(true);
+    setError('');
 
-    // Simulate signup request
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    console.log("Signup attempt:", { name, email, password });
-    setIsLoading(false);
+    try {
+      await signup({ name, email, password, role });
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Signup failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -101,6 +117,53 @@ export default function Signup() {
               </div>
             </div>
 
+            {/* Role Selection */}
+            <div className="space-y-2">
+              <label htmlFor="role" className="text-sm font-medium text-white/80">
+                Account Type
+              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  onClick={() => setRole('tourist')}
+                  className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                    role === 'tourist'
+                      ? 'border-purple-500 bg-purple-500/20 text-white'
+                      : 'border-white/20 bg-white/10 text-white/70 hover:border-white/40'
+                  }`}
+                >
+                  <div className="flex flex-col items-center space-y-2">
+                    <User className="w-6 h-6" />
+                    <span className="font-medium">Tourist</span>
+                    <span className="text-xs text-center">For visitors and travelers</span>
+                  </div>
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => setRole('authority')}
+                  className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                    role === 'authority'
+                      ? 'border-purple-500 bg-purple-500/20 text-white'
+                      : 'border-white/20 bg-white/10 text-white/70 hover:border-white/40'
+                  }`}
+                >
+                  <div className="flex flex-col items-center space-y-2">
+                    <Shield className="w-6 h-6" />
+                    <span className="font-medium">Authority</span>
+                    <span className="text-xs text-center">For police and officials</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Error message */}
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            )}
+
             {/* Submit */}
             <button
               onClick={handleSubmit}
@@ -121,9 +184,12 @@ export default function Signup() {
             <div className="text-center pt-4">
               <p className="text-white/70">
                 Already have an account?{" "}
-                <button className="text-purple-400 hover:text-purple-300 font-semibold transition-colors duration-200">
+                <Link
+                  to="/login"
+                  className="text-purple-400 hover:text-purple-300 font-semibold transition-colors duration-200"
+                >
                   Log in
-                </button>
+                </Link>
               </p>
             </div>
           </div>

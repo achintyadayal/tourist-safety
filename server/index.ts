@@ -11,8 +11,12 @@ import * as trackingRoutes from "./routes/tracking";
 import * as dashboardRoutes from "./routes/dashboard";
 import * as anomalyRoutes from "./routes/anomaly";
 
+// Authentication Routes
+import * as authRoutes from "./routes/auth";
+
 // Initialize sample data
 import { initializeSampleData, getStoreStats } from "./data/store";
+import { initializeAuthData, getAuthStats } from "./data/auth";
 
 export function createServer() {
   const app = express();
@@ -24,6 +28,7 @@ export function createServer() {
 
   // Initialize sample data on startup
   initializeSampleData();
+  initializeAuthData();
 
   // Health check and system info
   app.get("/api/ping", (_req, res) => {
@@ -32,6 +37,15 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Authentication Routes
+  app.post("/api/auth/login", authRoutes.login);
+  app.post("/api/auth/signup", authRoutes.signup);
+  app.post("/api/auth/refresh", authRoutes.refreshToken);
+  app.post("/api/auth/logout", authRoutes.logout);
+  app.get("/api/auth/profile", authRoutes.getProfile);
+  app.put("/api/auth/profile", authRoutes.updateProfile);
+  app.put("/api/auth/change-password", authRoutes.changePassword);
 
   app.get("/api/health", (_req, res) => {
     res.json({
@@ -43,7 +57,8 @@ export function createServer() {
         gps: "active",
         notifications: "active"
       },
-      dataStats: getStoreStats()
+      dataStats: getStoreStats(),
+      authStats: getAuthStats()
     });
   });
 

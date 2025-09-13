@@ -7,6 +7,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "@/components/layout/AppLayout";
+import { AuthProvider } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
@@ -15,6 +17,7 @@ import AppFeaturesPage from "./pages/AppFeaturesPage";
 import AuthoritiesLandingPage from "./pages/AuthoritiesLandingPage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -24,21 +27,28 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route index element={<Index />} />
-            <Route path="digital-id" element={<DigitalIdLanding />} />
-            <Route path="tourist-app" element={<AppFeaturesPage />} />
-            <Route path="dashboard" element={<AuthoritiesLandingPage />} />
-            <Route path="privacy" element={<Placeholder />} />
-            <Route path="terms" element={<Placeholder />} />
-            <Route path="security" element={<Placeholder />} />
-            <Route path="login" element={<Login />}/>
-            <Route path="signup" element={<Signup />}/>
-          </Route>
-          {/* Catch-all must remain last */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route index element={<Index />} />
+              <Route path="digital-id" element={<DigitalIdLanding />} />
+              <Route path="tourist-app" element={<AppFeaturesPage />} />
+              <Route path="authorities" element={<AuthoritiesLandingPage />} />
+              <Route path="privacy" element={<Placeholder />} />
+              <Route path="terms" element={<Placeholder />} />
+              <Route path="security" element={<Placeholder />} />
+              <Route path="login" element={<Login />}/>
+              <Route path="signup" element={<Signup />}/>
+              <Route path="dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }/>
+            </Route>
+            {/* Catch-all must remain last */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

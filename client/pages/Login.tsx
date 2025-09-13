@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
-import Signup from "./pages/Signup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from '../contexts/AuthContext';
 
 
 export default function Login() {
@@ -9,15 +9,28 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
     setIsLoading(true);
+    setError('');
 
-    // Simulate login request
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    console.log('Login attempt:', { email, password });
-    setIsLoading(false);
+    try {
+      await login({ email, password });
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -95,6 +108,13 @@ export default function Login() {
                 Forgot password?
               </button>
             </div>
+
+            {/* Error message */}
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            )}
 
             {/* Submit button */}
             <button

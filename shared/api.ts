@@ -216,3 +216,70 @@ export interface CreateSafetyZoneRequest {
   description: string;
   alertMessage: string;
 }
+
+// Authentication Types
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'tourist' | 'authority' | 'admin';
+  isActive: boolean;
+  createdAt: string;
+  lastLogin?: string;
+  profile?: {
+    phoneNumber?: string;
+    nationality?: string;
+    avatar?: string;
+  };
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+}
+
+export interface SignupRequest {
+  name: string;
+  email: string;
+  password: string;
+  role?: 'tourist' | 'authority';
+  profile?: {
+    phoneNumber?: string;
+    nationality?: string;
+  };
+}
+
+export interface AuthResponse {
+  success: boolean;
+  user: Omit<User, 'password'>;
+  token: string;
+  refreshToken?: string;
+  expiresIn: number;
+}
+
+export interface LoginResponse extends AuthResponse {
+  message: string;
+}
+
+export interface SignupResponse extends AuthResponse {
+  message: string;
+}
+
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}
