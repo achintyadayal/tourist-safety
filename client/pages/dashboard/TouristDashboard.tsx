@@ -16,9 +16,13 @@ import {
   Users,
   Settings,
   Bell,
-  Camera
+  Camera,
+  IdCard,
+  QrCode,
+  Download
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface SafetyZone {
   id: string;
@@ -39,14 +43,18 @@ interface LocationUpdate {
 
 export default function TouristDashboard() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [currentLocation, setCurrentLocation] = useState<LocationUpdate | null>(null);
   const [nearbyZones, setNearbyZones] = useState<SafetyZone[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [locationPermission, setLocationPermission] = useState<boolean | null>(null);
+  const [digitalIds, setDigitalIds] = useState<any[]>([]);
+  const [isLoadingDigitalIds, setIsLoadingDigitalIds] = useState(false);
 
   useEffect(() => {
     requestLocationPermission();
     fetchNearbyZones();
+    fetchDigitalIds();
   }, []);
 
   const requestLocationPermission = async () => {
@@ -110,6 +118,25 @@ export default function TouristDashboard() {
       console.error('Error fetching nearby zones:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchDigitalIds = async () => {
+    setIsLoadingDigitalIds(true);
+    try {
+      const response = await fetch('/api/digital-id', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      });
+      const data = await response.json();
+      if (data.success) {
+        setDigitalIds(data.data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching Digital IDs:', error);
+    } finally {
+      setIsLoadingDigitalIds(false);
     }
   };
 
@@ -296,6 +323,120 @@ export default function TouristDashboard() {
             </Card>
           </div>
         )}
+
+        {/* Digital ID Section */}
+        <div className="mb-8">
+          <Card className="border-blue-200 bg-blue-50">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <IdCard className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-blue-900">Digital Tourist ID</h3>
+                    <p className="text-blue-700">Generate your blockchain-verified digital identity for secure travel</p>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => navigate('/generate-digital-id')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <QrCode className="w-4 h-4 mr-2" />
+                  Generate Digital ID
+                </Button>
+              </div>
+
+              {/* Display Generated Digital IDs */}
+              {isLoadingDigitalIds ? (
+                <div className="text-center py-4">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                  <p className="text-blue-700 mt-2">Loading Digital IDs...</p>
+                </div>
+              ) : digitalIds.length > 0 ? (
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-blue-900">Your Digital IDs</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {digitalIds.map((digitalId) => (
+                      <Card key={digitalId.id} className="bg-white border-blue-200">
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-2">
+                              <Shield className="w-5 h-5 text-blue-600" />
+                              <span className="font-mono text-sm font-semibold">{digitalId.id}</span>
+                            </div>
+                            <Badge className="bg-green-100 text-green-800">
+                              {digitalId.status}
+                            </Badge>
+                          </div>
+                          
+                          <div className="space-y-2 text-sm">
+                            <div>
+                              <span className="font-medium">Name:</span> {digitalId.fullName}
+                            </div>
+                            <div>
+                              <span className="font-medium">Destination:</span> {digitalId.destination}
+                            </div>
+                            <div>
+                              <span className="font-medium">Valid Until:</span> {new Date(digitalId.departureDate).toLocaleDateString()}
+                            </div>
+                            <div>
+                              <span className="font-medium">Created:</span> {new Date(digitalId.createdAt).toLocaleDateString()}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between mt-4">
+                            <div className="bg-gray-100 p-2 rounded">
+                              <img src={digitalId.qrCode} alt="QR Code" className="w-12 h-12" />
+                            </div>
+                            <div className="text-right">
+                              <p className="text-xs text-gray-500 font-mono">
+                                {digitalId.blockchainHash.substring(0, 10)}...
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex space-x-2 mt-4">
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="flex-1"
+                              onClick={() => window.open(digitalId.qrCode, '_blank')}
+                            >
+                              <QrCode className="w-4 h-4 mr-1" />
+                              View QR
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="flex-1"
+                              onClick={() => window.print()}
+                            >
+                              <Download className="w-4 h-4 mr-1" />
+                              Print
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <IdCard className="w-12 h-12 text-blue-400 mx-auto mb-4" />
+                  <p className="text-blue-700 mb-4">No Digital IDs generated yet</p>
+                  <Button 
+                    onClick={() => navigate('/generate-digital-id')}
+                    variant="outline"
+                    className="border-blue-300 text-blue-700 hover:bg-blue-100"
+                  >
+                    Create Your First Digital ID
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Main Content */}
         <Tabs defaultValue="safety" className="space-y-6">

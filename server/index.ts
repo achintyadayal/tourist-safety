@@ -14,6 +14,9 @@ import * as anomalyRoutes from "./routes/anomaly";
 // Authentication Routes
 import * as authRoutes from "./routes/auth";
 
+// Digital ID Routes
+import * as digitalIdRoutes from "./routes/digitalId";
+
 // Initialize sample data
 import { initializeSampleData, getStoreStats } from "./data/store";
 import { initializeAuthData, getAuthStats } from "./data/auth";
@@ -46,6 +49,13 @@ export function createServer() {
   app.get("/api/auth/profile", authRoutes.getProfile);
   app.put("/api/auth/profile", authRoutes.updateProfile);
   app.put("/api/auth/change-password", authRoutes.changePassword);
+
+  // Digital ID Routes
+  app.post("/api/digital-id/generate", digitalIdRoutes.authenticateUser, digitalIdRoutes.generateDigitalId);
+  app.get("/api/digital-id", digitalIdRoutes.authenticateUser, digitalIdRoutes.getDigitalIds);
+  app.get("/api/digital-id/:id", digitalIdRoutes.authenticateUser, digitalIdRoutes.getDigitalIdById);
+  app.put("/api/digital-id/:id", digitalIdRoutes.authenticateUser, digitalIdRoutes.updateDigitalId);
+  app.delete("/api/digital-id/:id", digitalIdRoutes.authenticateUser, digitalIdRoutes.deleteDigitalId);
 
   app.get("/api/health", (_req, res) => {
     res.json({

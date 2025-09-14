@@ -1,17 +1,20 @@
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Shield, Map, Radar, Siren, IdCard, Languages } from "lucide-react";
+import { Shield, Map, Radar, Siren, IdCard, Languages, User } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { to: "/", label: "Home" },
   { to: "/digital-id", label: "Digital ID" },
   { to: "/tourist-app", label: "Tourist App" },
-  { to: "/dashboard", label: "Authorities" },
+  { to: "/authorities", label: "Authorities" },
 ];
 
 function Header() {
   const location = useLocation();
+  const { user, logout } = useAuth();
+  
   return (
     <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -44,18 +47,49 @@ function Header() {
               {item.label}
             </NavLink>
           ))}
+          {user && (
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                cn(
+                  "px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground transition-colors",
+                  isActive && "bg-accent text-accent-foreground",
+                )
+              }
+            >
+              Dashboard
+            </NavLink>
+          )}
         </nav>
         <div className="flex items-center gap-2">
-          <Button asChild variant="outline" className="gap-2">
-            <Link to="/login">
-              <IdCard className="size-4" /> Login/Signup
-            </Link>
-          </Button>
-          <Button asChild className="gap-2">
-            <Link to="/tourist-app">
-              <Siren className="size-4" /> Open App
-            </Link>
-          </Button>
+          {user ? (
+            <>
+              <span className="text-sm text-muted-foreground hidden sm:inline">
+                Welcome, {user.name}
+              </span>
+              <Button asChild variant="outline" className="gap-2">
+                <Link to="/dashboard">
+                  <User className="size-4" /> Dashboard
+                </Link>
+              </Button>
+              <Button onClick={logout} variant="outline" className="gap-2">
+                <IdCard className="size-4" /> Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button asChild variant="outline" className="gap-2">
+                <Link to="/login">
+                  <IdCard className="size-4" /> Login/Signup
+                </Link>
+              </Button>
+              <Button asChild className="gap-2">
+                <Link to="/tourist-app">
+                  <Siren className="size-4" /> Open App
+                </Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
       {/* secondary quick actions on small screens */}
@@ -74,6 +108,18 @@ function Header() {
               {item.label}
             </Link>
           ))}
+          {user && (
+            <Link
+              to="/dashboard"
+              className={cn(
+                "shrink-0 px-3 py-1.5 rounded-full text-sm border",
+                location.pathname === "/dashboard" &&
+                  "bg-accent text-accent-foreground",
+              )}
+            >
+              Dashboard
+            </Link>
+          )}
         </div>
       </div>
     </header>

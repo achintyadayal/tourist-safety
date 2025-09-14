@@ -18,6 +18,7 @@ import AuthoritiesLandingPage from "./pages/AuthoritiesLandingPage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import GenerateDigitalId from "./pages/GenerateDigitalId";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,11 @@ const App = () => (
               <Route path="dashboard" element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }/>
+              <Route path="generate-digital-id" element={
+                <ProtectedRoute>
+                  <GenerateDigitalId />
                 </ProtectedRoute>
               }/>
             </Route>

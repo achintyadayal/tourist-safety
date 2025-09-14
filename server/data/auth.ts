@@ -9,7 +9,7 @@ const refreshTokens: Set<string> = new Set();
 // JWT configuration
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'your-super-secret-refresh-key-change-in-production';
-const JWT_EXPIRES_IN = '24h';
+const JWT_EXPIRES_IN = '7d'; // 7 days for testing
 const JWT_REFRESH_EXPIRES_IN = '7d';
 
 // Password validation (commented out for easier testing)

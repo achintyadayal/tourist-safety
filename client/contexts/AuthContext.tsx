@@ -36,12 +36,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const storedToken = localStorage.getItem('auth_token');
     const storedUser = localStorage.getItem('auth_user');
     
+    console.log('Auth initialization:', { 
+      hasToken: !!storedToken, 
+      hasUser: !!storedUser,
+      tokenLength: storedToken?.length || 0
+    });
+    
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
     }
     setIsLoading(false);
   }, []);
+
+  // Add debugging for auth state changes
+  useEffect(() => {
+    console.log('Auth state changed:', { 
+      user: !!user, 
+      token: !!token, 
+      isLoading,
+      userRole: user?.role 
+    });
+  }, [user, token, isLoading]);
 
   // API helper function
   const apiCall = async (endpoint: string, options: RequestInit = {}) => {
@@ -135,15 +151,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const refreshToken = localStorage.getItem('auth_refresh_token');
       if (!refreshToken) {
+        console.log('No refresh token available');
         throw new Error('No refresh token available');
       }
 
+      console.log('Attempting token refresh...');
       const response = await apiCall('/auth/refresh', {
         method: 'POST',
         body: JSON.stringify({ refreshToken }),
       });
 
       if (response.success) {
+        console.log('Token refreshed successfully');
         setUser(response.data.user);
         setToken(response.data.token);
         localStorage.setItem('auth_token', response.data.token);
