@@ -13,7 +13,7 @@ import Index from "./pages/Index";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
 import DigitalIdLanding from "./pages/DigitalIdLanding";
-import AppFeaturesPage from "./pages/AppFeaturesPage";
+import TouristAppLanding from "./pages/TouristAppLanding";
 import AuthoritiesLandingPage from "./pages/AuthoritiesLandingPage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -33,7 +33,7 @@ const App = () => (
             <Route element={<AppLayout />}>
               <Route index element={<Index />} />
               <Route path="digital-id" element={<DigitalIdLanding />} />
-              <Route path="tourist-app" element={<AppFeaturesPage />} />
+              <Route path="tourist-app" element={<TouristAppLanding />} />
               <Route path="authorities" element={<AuthoritiesLandingPage />} />
               <Route path="privacy" element={<Placeholder />} />
               <Route path="terms" element={<Placeholder />} />
